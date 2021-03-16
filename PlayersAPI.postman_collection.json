@@ -1,0 +1,326 @@
+{
+	"info": {
+		"_postman_id": "2ea67362-b3fa-4c9a-bab7-c16711a2d014",
+		"name": "PlayersAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verification of status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verification of response message Player added\", function () {\r",
+							"  pm.expect(pm.response.text()).contains(\"Player added!\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verification of response time to be less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(280);\r",
+							"});\r",
+							"\r",
+							"postman.setNextRequest(\"PostDuplicateData\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"firstName\": \"Yuvan\",\r\n        \"lastName\": \"Ram\",\r\n        \"age\": 39,\r\n        \"gender\": \"Male\",\r\n        \"jersey\": 58\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PlayerURL}}/player",
+					"host": [
+						"{{PlayerURL}}"
+					],
+					"path": [
+						"player"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllPlayers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verification of status code for 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verification of total number of records for 5\", function () {\r",
+							"       console.log(pm.response.json().length);\r",
+							"    pm.expect(pm.response.json().length).to.equal(5);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Verification of content type to be application/json\", function () {\r",
+							"pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verification of response time to be less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"postman.setNextRequest(\"Delete\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{PlayerURL}}/player",
+					"host": [
+						"{{PlayerURL}}"
+					],
+					"path": [
+						"player"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostDuplicateData",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verification of status code for 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verification of error message for duplicate data\", function () {\r",
+							"  pm.expect(pm.response.text()).contains(\"Error! Jersey number already exists!\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verification of response time to be less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"postman.setNextRequest(\"Put\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"firstName\": \"Yuvan\",\r\n        \"lastName\": \"Ram\",\r\n        \"age\": 39,\r\n        \"gender\": \"Male\",\r\n        \"jersey\": 58\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PlayerURL}}/player",
+					"host": [
+						"{{PlayerURL}}"
+					],
+					"path": [
+						"player"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verification of status code for 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verification of content type to be application/json\", function () {\r",
+							"pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verification of firstName, lastName, Gender, Age, jersey\", function () {\r",
+							"   var jsonData = pm.response.json();\r",
+							"   pm.expect(jsonData.firstName).to.equal(\"Ram\");\r",
+							"   pm.expect(jsonData.lastName).to.equal(\"Yuvan\");\r",
+							"   pm.expect(jsonData.age).to.equal(39);\r",
+							"   pm.expect(jsonData.gender).to.equal(\"Male\");\r",
+							"   pm.expect(jsonData.jersey).to.equal(58);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Verification of response time to be less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"postman.setNextRequest(\"GetAllPlayers\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{PlayerURL}}/player/5",
+					"host": [
+						"{{PlayerURL}}"
+					],
+					"path": [
+						"player",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verification of status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verification of response message Player Updated\", function () {\r",
+							"  pm.expect(pm.response.text()).contains(\"Player updated\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verification of response time to be less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"postman.setNextRequest(\"GetById\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"firstName\": \"Ram\",\r\n        \"lastName\": \"Yuvan\",\r\n        \"age\": 39,\r\n        \"gender\": \"Male\",\r\n        \"jersey\": 58\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PlayerURL}}/player/5",
+					"host": [
+						"{{PlayerURL}}"
+					],
+					"path": [
+						"player",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAgain",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verification of error message for deleting already deleted data\", function () {\r",
+							"  pm.expect(pm.response.text()).contains(\"Player does not exist\");\r",
+							"});\r",
+							"\r",
+							"postman.setNextRequest(null);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{PlayerURL}}/player/5",
+					"host": [
+						"{{PlayerURL}}"
+					],
+					"path": [
+						"player",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verification of response time to be less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verification of response message player deleted\", function () {\r",
+							"  pm.expect(pm.response.text()).contains(\"Player deleted\");\r",
+							"});\r",
+							"\r",
+							"postman.setNextRequest(\"DeleteAgain\");\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{PlayerURL}}/player/5",
+					"host": [
+						"{{PlayerURL}}"
+					],
+					"path": [
+						"player",
+						"5"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
